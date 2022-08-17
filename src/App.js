@@ -1,154 +1,156 @@
-
 import './App.css';
 
 import { useSelector, useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react';
+import { useFormik } from 'formik';
+import { addTask, updateTask, removeTask, setTaskList } from './store/reducers/kanbanTaskResources';
+import { new_task_7, task_list } from './asset/data';
 
 function App() {
 
   const { tasks } = useSelector((state) => state)
   const dispatch = useDispatch()
 
-  console.log(tasks)
+  useEffect(() => {
+    dispatch(setTaskList(task_list))
+  }, [])
 
-  function drag(ev) {
+  const formik = useFormik({
+    initialValues: {
+      id: '',
+      name: '',
+      description: '',
+      status: 'todo'
+    },
+    validateOnChange: false,
+    validate: values => {
+      let errors = {};
+      if (!values.name) {
+        errors = { ...errors, name: 'Enter task name please!' }
+      }
+
+      if (!values.description) {
+        errors = { ...errors, description: 'Enter task description please!' }
+      }
+      console.log(errors)
+      return errors;
+    },
+    onSubmit: (values) => formOnSubmit(values)
+  });
+
+  const formOnChange = (e) => {
+    formik.setFieldValue(e.target.name, e.target.value);
+  }
+
+  const formOnSubmit = (values) => {
+    values.id = tasks.taskList.length + 1
+    dispatch(addTask(values))
+    console.log(values)
+    formik.setValues(formik.initialValues)
+  }
+
+  const drag = (ev) => {
     console.log('dragging', ev.target.id)
     ev.dataTransfer.setData("text", ev.target.id);
   }
 
-  function allowDrop(ev) {
+  const allowDrop = (ev) => {
     console.log('allowing drop', ev)
     ev.preventDefault();
   }
 
-  function drop(ev) {
-    console.log('dropping', ev)
+  const drop = (ev) => {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
-    ev.currentTarget.appendChild(document.getElementById(data));
+    dispatch(updateTask(data, ev.currentTarget.id))
   }
 
-  function createTask() {
-    console.log('creating task')
-    var x = document.getElementById("inprogress");
-    var y = document.getElementById("done");
-    var z = document.getElementById("create-new-task-block");
-    if (x.style.display === "none") {
-      x.style.display = "block";
-      y.style.display = "block";
-      z.style.display = "none";
-    } else {
-      x.style.display = "none";
-      y.style.display = "none";
-      z.style.display = "flex";
-    }
+  const cancelTask = () => {
+    formik.setValues(formik.initialValues)
+    formik.setErrors({})
   }
 
-  function saveTask() {
-    // var saveButton = document.getElementById("save-button");
-    // var editButton = document.getElementById("edit-button");
-    // if (saveButton.style.display === "none") {
-    //     saveButton.style.display = "block";
-    //     editButton.style.display = "none";
-    // } else{
-    //     saveButton.style.display = "none";
-    //     editButton.style.display = "block";
-    // }
-
-    var todo = document.getElementById("todo");
-    var taskName = document.getElementById("task-name").value;
-    todo.innerHTML += `
-    <div className="task" id="${taskName.toLowerCase().split(" ").join("")}" draggable="true" onDragStart={drag}>
-        <span>${taskName}</span>
-    </div>
-    `
+  const remove = (id, ev) => {
+    ev.preventDefault();
+    console.log(id, ev)
+    dispatch(removeTask(id))
   }
-
-  function editTask() {
-    var saveButton = document.getElementById("save-button");
-    var editButton = document.getElementById("edit-button");
-    if (saveButton.style.display === "none") {
-      saveButton.style.display = "block";
-      editButton.style.display = "none";
-    } else {
-      saveButton.style.display = "none";
-      editButton.style.display = "block";
-    }
-  }
-
-
-
 
   return (
     <div className="App">
 
       <div className="container">
-        <div className="kanban-heading">
-          <strong className="kanban-heading-text">Kanban Board</strong>
+
+        <div className="create-new-task-block" id="create-new-task-block">
+          <h2>Add New Task</h2>
+
+          <span className="form-row">
+            <label className="form-row-label" for="task-name">Task</label>
+            <input className="form-row-input" type="text" name="name" id="task-name" onChange={formOnChange} value={formik.values['name']} />
+          </span>
+          <span className="field-error">{formik.errors['name'] ? formik.errors['name'] : ''}</span>
+
+          <span className="form-row">
+            <label className="form-row-label" for="task-description">Description</label>
+            <textarea className="form-row-input" name="description" id="task-description" cols="70" rows="10" onChange={formOnChange} value={formik.values['description']}></textarea>
+          </span>
+          <span className="field-error">{formik.errors['description'] ? formik.errors['description'] : ''}</span>
+
+          <span className="form-row-buttons">
+            <button id="save-button" onClick={formik.handleSubmit}>Save</button>
+            <button id="cancel-button" onClick={cancelTask}>Cancel</button>
+          </span>
+
         </div>
+        <br /><br />
+
         <div className="kanban-board">
 
           <div className="kanban-block" id="todo" onDrop={drop} onDragOver={allowDrop}>
-            <strong>To Do</strong>
-            <div className="task-button-block">
-              <button id="task-button" onClick={createTask}>Create new task</button>
-            </div>
-            <div className="task" id="task1" draggable="true" onDragStart={drag}>
-              <span>Task 1</span>
-            </div>
-            <div className="task" id="task2" draggable="true" onDragStart={drag}>
-              <span>Task 2</span>
-            </div>
-            <div className="task" id="task3" draggable="true" onDragStart={drag}>
-              <span>Task 3</span>
-            </div>
-            <div className="task" id="task4" draggable="true" onDragStart={drag}>
-              <span>Task 4</span>
-            </div>
-            <div className="task" id="task5" draggable="true" onDragStart={drag}>
-              <span>Task 5</span>
-            </div>
-            <div className="task" id="task6" draggable="true" onDragStart={drag}>
-              <span>Task 6</span>
-            </div>
+            <strong className='cart-header'>To Do</strong>
+            {
+              tasks.taskList &&
+              tasks.taskList.map((task) =>
+                task.status === 'todo' ?
+                  <div key={task.id} className="task" id={task.id} draggable="true" onDragStart={drag}>
+                    <span>{task.name}</span>
+                    <button className='delete-task' onClick={(ev) => remove(task.id, ev)}>X</button>
+                  </div> :
+                  ''
+              )
+            }
           </div>
 
           <div className="kanban-block" id="inprogress" onDrop={drop} onDragOver={allowDrop}>
-            <strong>In Progress</strong>
+            <strong className='cart-header'>In Progress</strong>
+            {
+              tasks.taskList &&
+              tasks.taskList.map((task) =>
+                task.status === 'inprogress' ?
+                  <div key={task.id} className="task" id={task.id} draggable="true" onDragStart={drag}>
+                    <span>{task.name}</span>
+                    <button className='delete-task' onClick={(ev) => remove(task.id, ev)}>X</button>
+                  </div> :
+                  ''
+              )
+            }
           </div>
 
           <div className="kanban-block" id="done" onDrop={drop} onDragOver={allowDrop}>
-            <strong>Done</strong>
+            <strong className='cart-header'>Done</strong>
+            {
+              tasks.taskList &&
+              tasks.taskList.map((task) =>
+                task.status === 'done' ?
+                  <div key={task.id} className="task" id={task.id} draggable="true" onDragStart={drag}>
+                    <span>{task.name}</span>
+                    <button className='delete-task' onClick={(ev) => remove(task.id, ev)}>X</button>
+                  </div> :
+                  ''
+              )
+            }
           </div>
 
-
-          <div className="create-new-task-block" id="create-new-task-block">
-            <strong>New Task</strong>
-
-            <span className="form-row">
-              <label className="form-row-label" for="task-name">Task</label>
-              <input className="form-row-input" type="text" name="task-name" id="task-name" />
-            </span>
-
-            <span className="form-row">
-              <label className="form-row-label" for="task-name">Description</label>
-              <textarea className="form-row-input" name="task-description" id="task-description" cols="70" rows="10"></textarea>
-            </span>
-
-            <span className="form-row">
-              <label className="form-row-label" for="task-name">Status</label>
-              <select className="form-row-input" name="task-status" id="task-status">
-                <option value="todo">To Do</option>
-                <option value="inprogress">In Progress</option>
-                <option value="done">Done</option>
-              </select>
-            </span>
-
-            <span className="form-row-buttons">
-              <button id="edit-button" onClick={editTask}>Edit</button>
-              <button id="save-button" onClick={saveTask}>Save</button>
-              <button id="cancel-button" onClick={createTask}>Cancel</button>
-            </span>
-          </div>
         </div>
       </div>
 

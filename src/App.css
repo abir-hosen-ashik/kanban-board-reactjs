@@ -42,22 +42,16 @@
 /* Custom css */
 
 body {
-  background-color: black;
+  background-color: rgb(213, 230, 227);
 }
 
 .container {
   width: 70%;
   min-width: 50%;
   margin: auto;
+  margin-top: 50px;
   display: flex;
   flex-direction: column;
-}
-
-.kanban-heading {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  font-family: sans-serif;
 }
 
 .kanban-board {
@@ -65,14 +59,6 @@ body {
   flex-direction: row;
   justify-content: space-between;
   font-family: sans-serif;
-}
-
-.kanban-heading-text {
-  font-size: 1.8rem;
-  background-color: tomato;
-  padding: 0.8rem 1.7rem;
-  border-radius: 0.5rem;
-  margin: 1rem;
 }
 
 .kanban-block,
@@ -84,45 +70,38 @@ body {
   border-radius: 0.3rem;
 }
 
-#todo {
-  background-color: #fec6d1;
-}
-
-#inprogress {
-  background-color: #ffaf00;
-  /* display: none; */
-}
-
-#done {
-  background-color: #018b01;
-  /* display: none; */
+#todo, #inprogress, #done {
+  background-color: #ffffff;
+  border: 1px solid rgb(198, 198, 198);
+  box-shadow: 5px 5px 50px 5px grey;
 }
 
 .task {
   background-color: white;
   margin: 0.2rem 0rem 0.3rem 0rem;
-  border: 0.1rem solid black;
+  border: 0.1rem solid rgb(197, 197, 197);
   border-radius: 0.2rem;
   padding: 0.5rem 0.2rem 0.5rem 2rem;
+  box-shadow: 5px 5px 50px 5px grey;
 }
 
 #task-button {
-  margin: 0.2rem 0rem 0.1rem 0rem;
+  margin: 0.5rem 0rem 0.1rem 0rem;
   background-color: white;
   border-radius: 0.2rem;
   width: 100%;
-  border: 0.25rem solid black;
+  border: 1px solid rgb(195, 92, 92);
   padding: 0.5rem 2.7rem;
   border-radius: 0.3rem;
   font-size: 1rem;
 }
 
 .create-new-task-block {
-  display: none;
-  /* display: flex; */
-  background: #ffaf00;
-  width: 64.4%;
+  display: flex;
+  background: #ffffff;
+  width: 98%;
   flex-direction: column;
+  box-shadow: 5px 5px 50px 5px grey;
 }
 
 .form-row {
@@ -132,18 +111,17 @@ body {
 }
 
 .form-row-label {
-  width: 15%;
-  padding: 0.2rem;
-  padding-right: 0.5rem;
-  border: 0.1rem solid black;
-  border-right: 0;
+  width: 25%;
   border-radius: 0.2rem 0rem 0rem 0.2rem;
+  text-align: left;
+  color:rgb(128, 128, 128);
+  margin-top: 20px;
 }
 
 .form-row-input {
-  border: 0.1rem solid black;
+  border: 0.1rem solid rgb(206, 206, 206);
   border-radius: 0rem 0.2rem 0.2rem 0rem;
-  width: 85%;
+  width: 75%;
 }
 
 textarea {
@@ -153,23 +131,40 @@ textarea {
 .form-row-buttons {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: right;
   margin: 0.2rem;
 }
 
-#edit-button,
 #save-button,
 #cancel-button {
-  margin: 0.2rem 0rem 0.1rem 0rem;
   background-color: white;
   border-radius: 0.2rem;
-  width: 49.2%;
-  border: 0.25rem solid black;
+  width: 20%;
+  border: 1px solid rgb(213, 213, 213);
   padding: 0.5rem 2.7rem;
   border-radius: 0.3rem;
   font-size: 1rem;
+  margin-right: 10px;
 }
 
-#edit-button {
-  display: none;
+#save-button {
+  background-color: rgb(91, 191, 158);
+  color: white;
+}
+
+.field-error {
+  color: red;
+}
+
+.delete-task {
+  float: right
+}
+
+.cart-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 10px 0 10px 0;
+  color: white;
+  background-color: rgb(195, 92, 92);
 }

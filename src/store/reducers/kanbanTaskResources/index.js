@@ -3,6 +3,7 @@ export {
     setTaskForm,
     removeTask,
     setTaskList,
+    updateTask,
     clearState
 } from './action'
 

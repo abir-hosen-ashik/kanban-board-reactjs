@@ -32,12 +32,25 @@ export const removeTask = (payload) => ({
 });
 
 export const setTaskList = (payload) => ({
-  type: types.REMOVE_TASK,
+  type: types.SET_TASK_LIST,
   payload: payload,
   meta: {
     api: false,
     successMessage: 'Task seted on task list',
     errorMessage: "Task failed to set on task list",
+  },
+});
+
+export const updateTask = (id, state) => ({
+  type: types.UPDATE_TASK,
+  payload: {
+    id: id,
+    state: state
+  },
+  meta: {
+    api: false,
+    successMessage: 'Task updated on task list',
+    errorMessage: "Task updated to set on task list",
   },
 });
 
