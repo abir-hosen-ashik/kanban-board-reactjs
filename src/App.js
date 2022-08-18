@@ -12,8 +12,12 @@ function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(setTaskList(task_list))
+    dispatch(setTaskList())
   }, [])
+
+  useEffect(() => {
+    if (tasks.fetch_list) dispatch(setTaskList())
+  }, [tasks.fetch_list])
 
   const formik = useFormik({
     initialValues: {
@@ -43,7 +47,7 @@ function App() {
   }
 
   const formOnSubmit = (values) => {
-    values.id = tasks.taskList.length + 1
+    // values.id = tasks.taskList.length + 1
     dispatch(addTask(values))
     console.log(values)
     formik.setValues(formik.initialValues)
@@ -62,7 +66,13 @@ function App() {
   const drop = (ev) => {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
-    dispatch(updateTask(data, ev.currentTarget.id))
+
+    let objIndex = tasks.taskList.findIndex((obj => obj.id == data))
+    var payload = { ...tasks.taskList[objIndex] }
+
+    payload.status = ev.currentTarget.id
+    console.log(payload)
+    dispatch(updateTask(payload))
   }
 
   const cancelTask = () => {
@@ -77,6 +87,7 @@ function App() {
   }
 
   return (
+
     <div className="App">
 
       <div className="container">

@@ -1,17 +1,23 @@
-
-
 ## Start
 
-Here is kanban board frontend developed through ReactJS
+Here is kanban board frontend, developed through ReactJS.
 
-environment: `Node v16.14.2`
+Environment: `Node v16.14.2`
 
 ### steps
 
-you may need to delete `package-look.json`
-then
+You may need to delete `package-look.json`
+
+then rename `.env.example` to `.env`
+
+Then on cli 
+
 `npm i`
-& `npm start`
+
+`npm start`
+
+
 project will run on
+
 [http://localhost:3000](http://localhost:3000)
 

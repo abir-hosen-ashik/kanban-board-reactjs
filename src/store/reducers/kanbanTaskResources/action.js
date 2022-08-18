@@ -13,42 +13,53 @@ export const setTaskForm = (payload) => ({
 
 export const addTask = (payload) => ({
   type: types.ADD_TASK,
-  payload: payload,
+  payload: {
+    method: 'POST',
+    path: 'task',
+    data: payload
+  },
   meta: {
-    api: false,
+    api: true,
     successMessage: 'Task add on task list',
     errorMessage: "Task failed to add on task list",
   },
 });
 
-export const removeTask = (payload) => ({
+export const removeTask = (id) => ({
   type: types.REMOVE_TASK,
-  payload: payload,
+  payload:{
+    method: 'DELETE',
+    path: `task/${id}`,
+  },
   meta: {
-    api: false,
+    api: true,
     successMessage: 'Task removed from task list',
     errorMessage: "Task failed to remove from task list",
   },
 });
 
-export const setTaskList = (payload) => ({
+export const setTaskList = () => ({
   type: types.SET_TASK_LIST,
-  payload: payload,
+  payload: {
+    method: 'GET',
+    path: 'task',
+  },
   meta: {
-    api: false,
+    api: true,
     successMessage: 'Task seted on task list',
     errorMessage: "Task failed to set on task list",
   },
 });
 
-export const updateTask = (id, state) => ({
+export const updateTask = (task) => ({
   type: types.UPDATE_TASK,
   payload: {
-    id: id,
-    state: state
+    method: 'POST',
+    path: 'task',
+    data: task
   },
   meta: {
-    api: false,
+    api: true,
     successMessage: 'Task updated on task list',
     errorMessage: "Task updated to set on task list",
   },

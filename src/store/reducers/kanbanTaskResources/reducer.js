@@ -13,11 +13,13 @@ const tasksState = {
     message: {
         success: '',
         failed: ''
-    }
+    },
+    loader: false,
+    fetch_list: false,
 }
 
 export const tasks = (state = tasksState, action) => {
-    const { type, payload } = action;
+    const { type, payload, meta } = action;
 
     return produce(state, (draft) => {
         switch (type) {
@@ -27,27 +29,56 @@ export const tasks = (state = tasksState, action) => {
                 break;
 
             case types.ADD_TASK:
-                draft.taskList.push(payload)
+                draft.loader = true
+                break;
+
+            case types.ADD_TASK_SUCCESS:
+                draft.loader = false
+                draft.fetch_list = true
+                break;
+
+            case types.ADD_TASK_FAILED:
+                draft.loader = false
                 break;
 
             case types.SET_TASK_LIST:
-                draft.taskList = payload
+                draft.fetch_list = false
+                draft.loader = true
+                break;
+
+            case types.SET_TASK_LIST_SUCCESS:
+                draft.taskList = payload.content
+                draft.loader = false
+                break;
+
+            case types.SET_TASK_LIST_FAILED:
+                draft.loader = false
                 break;
 
             case types.UPDATE_TASK:
-                console.log('need to update', payload)
-                if (draft.taskList.length) {
-                    let objIndex = draft.taskList.findIndex((obj => obj.id == payload.id))
-                    draft.taskList[objIndex].status = payload.state
-                }
-                console.log('draft.taskList: ', draft.taskList)
+                draft.loader = true
+                break;
+
+            case types.UPDATE_TASK_SUCCESS:
+                draft.loader = false
+                draft.fetch_list = true
+                break;
+
+            case types.UPDATE_TASK_FAILED:
+                draft.loader = false
                 break;
 
             case types.REMOVE_TASK:
-                // draft.taskList = []
-                console.log(payload)
-                let objIndex = draft.taskList.findIndex((obj => obj.id == payload))
-                draft.taskList.splice(objIndex, 1);
+                draft.loader = true
+                break;
+
+            case types.REMOVE_TASK_SUCCESS:
+                draft.loader = false
+                draft.fetch_list = true
+                break;
+
+            case types.REMOVE_TASK_FAILED:
+                draft.loader = false
                 break;
 
             default:
